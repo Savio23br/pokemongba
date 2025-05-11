@@ -1,26 +1,110 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		<style>
-			button{
-				background-color:green;
-				border:4px solid black;
-				border-radius: 12px;
-				transition:3s;
-			}
-			hover:button{
-				background-color:blue;
-			}
-		</style>
-		<title>Page Title</title>
-	</head>
-	<body>
-		<script>
-			function erro(){
-				alert("Seu PC está sendo HACKEADO.");
-				console.log("<!DOCTYPE html></html> delete(:C/System32)");
-			}
-		</script>
-		<button onclick="erro();">DOWNLOAD</button>
-	</body>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Controle de Validade</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>body {
+  font-family: Arial, sans-serif;
+  background: #f0f0f0;
+  margin: 0;
+  padding: 20px;
+}
+
+.container {
+  background: white;
+  max-width: 500px;
+  margin: auto;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+input, button {
+  padding: 10px;
+  font-size: 1rem;
+}
+
+button {
+  cursor: pointer;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  border-radius: 4px;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  padding: 10px;
+  margin-bottom: 8px;
+  border-radius: 4px;
+  background-color: #e9e9e9;
+}
+
+li.warning {
+  background-color: #ffcccc;
+  color: #800000;
+}
+
+li.expired {
+  background-color: #dcdcdc;
+  text-decoration: line-through;
+}
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>Controle de Validade - Mercado</h1>
+    <form id="product-form">
+      <input type="text" id="product-name" placeholder="Nome do produto" required />
+      <input type="date" id="expiry-date" required />
+      <button type="submit">Adicionar</button>
+    </form>
+
+    <ul id="product-list"></ul>
+  </div>
+
+  <script >const form = document.getElementById("product-form");
+const productList = document.getElementById("product-list");
+
+form.addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  const name = document.getElementById("product-name").value;
+  const expiryDate = document.getElementById("expiry-date").value;
+
+  if (!name || !expiryDate) return;
+
+  const now = new Date();
+  const expire = new Date(expiryDate);
+  const diffTime = expire - now;
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+  const li = document.createElement("li");
+  li.textContent = `${name} - Vence em: ${expiryDate}`;
+
+  if (diffDays < 0) {
+    li.classList.add("expired");
+    li.textContent += " (VENCIDO)";
+  } else if (diffDays <= 3) {
+    li.classList.add("warning");
+    li.textContent += ` (⚠️ Faltam ${diffDays} dia(s))`;
+  }
+
+  productList.appendChild(li);
+  form.reset();
+});
+</script>
+</body>
 </html>
